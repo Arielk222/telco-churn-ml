@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "telco-churn-ml"
+version = "0.1.0"
+description = "End-to-end churn prediction pipeline with FastAPI deployment"
+requires-python = ">=3.11"
+
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic",
+  "numpy",
+  "pandas",
+"xgboost==2.0.3",
+  "joblib",
+  "dill",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "httpx",
+  "ruff"
+]
+
+[tool.ruff]
+line-length = 100

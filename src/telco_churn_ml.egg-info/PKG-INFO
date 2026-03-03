@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: telco-churn-ml
+Version: 0.1.0
+Summary: End-to-end churn prediction pipeline with FastAPI deployment
+Requires-Python: >=3.11
+Requires-Dist: fastapi
+Requires-Dist: uvicorn[standard]
+Requires-Dist: pydantic
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scikit-learn
+Requires-Dist: xgboost==1.7.6
+Requires-Dist: joblib
+Requires-Dist: dill
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: httpx; extra == "dev"
+Requires-Dist: ruff; extra == "dev"

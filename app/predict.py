@@ -1,4 +1,5 @@
 from __future__ import annotations
+from src.features import engineer_features
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -37,46 +38,6 @@ def load_bundle(artifacts_dir: Path = ARTIFACTS_DIR) -> ModelBundle:
     )
 
 
-def _engineer_features(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy()
-
-    # Ensure numeric
-    df["tenure"] = pd.to_numeric(df["tenure"], errors="coerce")
-    df["MonthlyCharges"] = pd.to_numeric(df["MonthlyCharges"], errors="coerce")
-    df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
-
-    # Engineered features
-    df["total_value"] = df["tenure"] * df["MonthlyCharges"]
-    df["avg_monthly_charge"] = df["TotalCharges"] / df["tenure"].replace({0: np.nan})
-    df["avg_monthly_charge"] = df["avg_monthly_charge"].fillna(0.0)
-
-    # Service count
-    service_cols = [
-        "PhoneService",
-        "MultipleLines",
-        "OnlineSecurity",
-        "OnlineBackup",
-        "DeviceProtection",
-        "TechSupport",
-        "StreamingTV",
-        "StreamingMovies",
-    ]
-
-    def is_yes(s: pd.Series) -> pd.Series:
-        return (s.astype(str).str.lower() == "yes").astype(int)
-
-    df["num_services"] = sum(is_yes(df[c]) for c in service_cols if c in df.columns)
-
-    # Tenure buckets (must match training logic!)
-    df["tenure_bucket"] = pd.cut(
-        df["tenure"],
-        bins=[-1, 12, 24, 48, 60, 10_000],
-        labels=["0-12", "13-24", "25-48", "49-60", "60+"],
-    ).astype(str)
-
-    df["is_month_to_month"] = (df["Contract"].astype(str) == "Month-to-month").astype(int)
-
-    return df
 
 
 def _one_hot_align(df: pd.DataFrame, feature_columns: List[str]) -> pd.DataFrame:

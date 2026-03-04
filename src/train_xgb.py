@@ -1,4 +1,5 @@
 from __future__ import annotations
+from src.features import engineer_features
 
 from pathlib import Path
 import json
@@ -13,43 +14,6 @@ from sklearn.metrics import roc_auc_score
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "Telco-Customer-Churn.csv"
 ARTIFACTS = ROOT / "artifacts"
-
-
-def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy()
-
-    df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
-    df = df.dropna(subset=["TotalCharges"])
-
-    df["total_value"] = df["tenure"] * df["MonthlyCharges"]
-    df["avg_monthly_charge"] = df["TotalCharges"] / df["tenure"].replace({0: np.nan})
-    df["avg_monthly_charge"] = df["avg_monthly_charge"].fillna(0.0)
-
-    service_cols = [
-        "PhoneService",
-        "MultipleLines",
-        "OnlineSecurity",
-        "OnlineBackup",
-        "DeviceProtection",
-        "TechSupport",
-        "StreamingTV",
-        "StreamingMovies",
-    ]
-
-    def is_yes(s: pd.Series) -> pd.Series:
-        return (s.astype(str).str.lower() == "yes").astype(int)
-
-    df["num_services"] = sum(is_yes(df[c]) for c in service_cols)
-
-    df["tenure_bucket"] = pd.cut(
-        df["tenure"],
-        bins=[-1, 12, 24, 48, 60, 10_000],
-        labels=["0-12", "13-24", "25-48", "49-60", "60+"],
-    ).astype(str)
-
-    df["is_month_to_month"] = (df["Contract"].astype(str) == "Month-to-month").astype(int)
-
-    return df
 
 
 def main() -> None:

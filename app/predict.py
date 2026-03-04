@@ -1,5 +1,6 @@
 from __future__ import annotations
 from src.features import engineer_features
+from src.preprocess import one_hot_transform
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -60,8 +61,8 @@ def _one_hot_align(df: pd.DataFrame, feature_columns: List[str]) -> pd.DataFrame
 
 def predict_one(bundle: ModelBundle, payload: Dict[str, Any]) -> Tuple[float, bool]:
     df = pd.DataFrame([payload])
-    df = _engineer_features(df)
-    X = _one_hot_align(df, bundle.feature_columns)
+    df = engineer_features(df)
+    X = one_hot_transform(df, bundle.feature_columns, drop_first=False)
 
     dmat = xgb.DMatrix(X)
     proba = float(bundle.booster.predict(dmat)[0])

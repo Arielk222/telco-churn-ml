@@ -1,6 +1,23 @@
 {
   "python": "3.11",
-  "xgboost": "1.6.2",
-  "roc_auc": 0.8260504941217883,
-  "threshold": 0.415
+  "xgboost": "2.0.3",
+  "roc_auc": 0.8372561936500555,
+  "threshold": 0.415,
+  "config_path": "/Users/arielklatskin/Dropbox/My Mac (Ariel\u2019s MacBook Pro)/Documents/telco-churn-ml/configs/train_config.yaml",
+  "model_params": {
+    "n_estimators": 600,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9,
+    "reg_lambda": 1.0,
+    "random_state": 42,
+    "n_jobs": 4,
+    "eval_metric": "logloss"
+  },
+  "split": {
+    "test_size": 0.2,
+    "random_state": 42
+  },
+  "scale_pos_weight": 2.768561872909699
 }

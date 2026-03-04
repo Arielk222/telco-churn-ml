@@ -3,8 +3,7 @@ uvicorn[standard]
 pydantic
 numpy
 pandas
-scikit-learn
-xgboost==1.7.6
+xgboost==2.0.3
 joblib
 dill
 
